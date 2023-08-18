@@ -1,15 +1,15 @@
 import fs from "fs";
 
 // Configure the following block for your mint.
-const mintStatus = "inactive";
-const tokenId = "";
-const contractAddressMint = "";
-const mintDate = "2023-09-15T06:25:36.020Z";
-const nrMintingUtxos = 5;
+const mintStatus = "active";
+const tokenId = "77a95410a07c2392c340384aef323aea902ebfa698a35815c4ef100062c6d8ac";
+const contractAddressMint = "bitcoincash:pvl88yaeyajf6cn8fhaf3qasl238rzrnpmnmgzr05krpkt0ez52z5rgwl9x9u";
+const mintDate = "2023-10-07T14:29:05.694Z";
+const nrMintingUtxos = 25;
 const collectionSize = 5000;
 const network = "mainnet";
-const apiDomain = "https://example.com/";
-const appName = "YourAppName";
+const apiDomain = "https://api.ninjas.cash/";
+const appName = "Cash-Ninjas-API"
 
 // Chaingraph instance. This returns our UTXO information.
 // Thanks Jason for running an awesome server.
