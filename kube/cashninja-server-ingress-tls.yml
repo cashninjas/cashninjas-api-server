@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cashninja-server-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  ingressClassName: "nginx"
+  tls:
+  - hosts:
+    - api.ninjas.cash
+    secretName: cashninja-server-tls
+  defaultBackend:
+    service:
+      name: cashninja-server
+      port:
+        number: 877
+  rules:
+  - host: api.ninjas.cash
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: cashninja-server
+            port:
+              number: 877

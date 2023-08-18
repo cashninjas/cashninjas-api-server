@@ -1,0 +1,19 @@
+{
+  "name": "cashninjas-api-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@bitauth/libauth": "^2.0.0-alpha.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "electrum-cash": "^3.1.1",
+    "express": "^4.18.2"
+  }
+}

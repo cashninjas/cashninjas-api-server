@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cashninja-server
+  namespace: default
+spec:
+  ports:
+    - port: 877
+      targetPort: 3000
+  selector:
+    service: cashninja-server
+  type: NodePort

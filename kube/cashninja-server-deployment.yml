@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  labels:
+    service: cashninja-server
+  name: cashninja-server
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      service: cashninja-server
+  template:
+    metadata:
+      labels:
+        service: cashninja-server
+    spec:
+      containers:
+      - image: zquestz/cashninja-server:latest
+        imagePullPolicy: Always
+        name: cashninja-server
+        volumeMounts:
+          - mountPath: /app/data
+            name: cashninja-data
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "100Mi"
+      restartPolicy: Always
+      volumes:
+        - name: cashninja-data
+          gcePersistentDisk:
+            pdName: cashninja-data
+            fsType: ext4
