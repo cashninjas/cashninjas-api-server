@@ -90,29 +90,31 @@ app.get('/mint', (req, res) => {
 
 // Filters BCMR file to hide IPFS links and unminted items.
 const filteredBCMR = function (bcmr) {
-  if (bcmr.identities[tokenId]) {
+  let bcmrCopy = JSON.parse(JSON.stringify(bcmr))
+
+  if (bcmrCopy.identities[tokenId]) {
     for (let i = 0; i < collectionSize; i++) {
       let vmNum = bigIntToVmNumber(BigInt(i))
       let indexHex = binToHex(vmNum)
 
       if (!nftMinted(i + 1)) {
-        delete bcmr.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]
+        delete bcmrCopy.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]
       } else {
         if (hideIPFSImages) {
-          if (bcmr.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]) {
-            bcmr.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]["uris"]["image"] = apiDomain + "images/" + (i + 1)
+          if (bcmrCopy.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]) {
+            bcmrCopy.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]["uris"]["image"] = apiDomain + "images/" + (i + 1)
           }
         }
         if (hideIPFSIcons) {
-          if (bcmr.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]) {
-            bcmr.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]["uris"]["icon"] = apiDomain + "icons/" + (i + 1)
+          if (bcmrCopy.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]) {
+            bcmrCopy.identities[tokenId][mintDate]["token"]["nfts"]["parse"]["types"][indexHex]["uris"]["icon"] = apiDomain + "icons/" + (i + 1)
           }
         }
       }
     }
   }
 
-  return bcmr;
+  return bcmrCopy;
 }
 
 // BCMR route.
