@@ -44,7 +44,7 @@ async function updateMintingUtxos() {
     nftsMinted = mintedPerUtxo.reduce((a, b) => a + b, 0);
 
     // If the Chaingraph instance has not seen the new minting tx, wait and re-fetch.
-    if (nftsMinted == oldAmountMinted) {
+    if (nftsMinted == oldAmountMinted && nftsMinted != 0) {
       setTimeout(updateMintingUtxos, 500);
     }
   } else {
