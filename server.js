@@ -20,14 +20,18 @@ await electrum.connect();
 // Declare global scope variables.
 let nftsMinted = 0;
 let commitmentCount = 0;
-const mintingUtxos = [];
-const mintedPerUtxo = [];
+let mintingUtxos = [];
+let mintedPerUtxo = [];
 
 // This function is called when an address updates,
 // then it calls Chaingraph to get updated UTXO information.
 async function updateMintingUtxos() {
   const oldAmountMinted = mintedPerUtxo.reduce((a, b) => a + b, 0);
   const responseJson = await queryMintingNFTs(tokenId, chaingraphUrl);
+
+  const newMintingUtxos = [];
+  const newMintedPerUtxo = [];
+
   if (responseJson.data) {
     const outputs = responseJson.data.output;
     for (let i = 0; i < outputs.length; i++) {
@@ -37,20 +41,23 @@ async function updateMintingUtxos() {
       const newMintingUtxo = { txid, vout: output.output_index, commitment: commitmentScriptNum };
       const commitmentNumber = Number(vmNumberToBigInt(hexToBin(commitmentScriptNum)));
       const numberMintingUtxo = commitmentNumber % nrMintingUtxos;
-      mintingUtxos[numberMintingUtxo] = newMintingUtxo;
+      newMintingUtxos[numberMintingUtxo] = newMintingUtxo;
       const amountMinted = Math.floor(commitmentNumber / nrMintingUtxos);
-      mintedPerUtxo[numberMintingUtxo] = amountMinted;
+      newMintedPerUtxo[numberMintingUtxo] = amountMinted;
     }
 
-    // We need to set the mintedPerUtxo to the max number of minted items for
+    // We need to set newMintedPerUtxo to the max number of minted items for
     // any fully used minting UTXO. Otherwise the reduce below will not
     // be accurate near the end of the mint.
     for (let i = 0; i < nrMintingUtxos; i++ ) {
-      if (mintedPerUtxo[i] == undefined) {
-        mintedPerUtxo[i] = collectionSize / nrMintingUtxos;
+      if (newMintedPerUtxo[i] == undefined) {
+        newMintedPerUtxo[i] = collectionSize / nrMintingUtxos;
       }
     }
 
+    // Update global state.
+    mintingUtxos = newMintingUtxos;
+    mintedPerUtxo = newMintedPerUtxo;
     nftsMinted = mintedPerUtxo.reduce((a, b) => a + b, 0);
 
     // If the Chaingraph instance has not seen the new minting tx, wait and re-fetch.
