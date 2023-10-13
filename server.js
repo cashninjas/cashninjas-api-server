@@ -41,6 +41,16 @@ async function updateMintingUtxos() {
       const amountMinted = Math.floor(commitmentNumber / nrMintingUtxos);
       mintedPerUtxo[numberMintingUtxo] = amountMinted;
     }
+
+    // We need to set the mintedPerUtxo to the max number of minted items for
+    // any fully used minting UTXO. Otherwise the reduce below will not
+    // be accurate near the end of the mint.
+    for (let i = 0; i < nrMintingUtxos; i++ ) {
+      if (mintedPerUtxo[i] == undefined) {
+        mintedPerUtxo[i] = collectionSize / nrMintingUtxos;
+      }
+    }
+
     nftsMinted = mintedPerUtxo.reduce((a, b) => a + b, 0);
 
     // If the Chaingraph instance has not seen the new minting tx, wait and re-fetch.
@@ -74,10 +84,21 @@ app.get('/mint', (req, res) => {
   let availableMintingUtxo = "";
 
   if (mintingUtxos.length > 0) {
-    let idx = commitmentCount % nrMintingUtxos
+    // Remove all undefined minting UTXOs.
+    let existingMintingUtxos = [];
+    for (let i = 0; i < mintingUtxos.length; i++) {
+      if (mintingUtxos[i] != undefined) {
+        existingMintingUtxos.push(mintingUtxos[i]);
+      }
+    }
 
-    availableMintingUtxo = mintingUtxos[idx].commitment;
-    commitmentCount++;
+    // If we have UTXOs left, pick a revolving commitment.
+    if (existingMintingUtxos.length > 0) {
+      let idx = commitmentCount % existingMintingUtxos.length
+
+      availableMintingUtxo = existingMintingUtxos[idx].commitment;
+      commitmentCount++;
+    }
   }
 
   res.json({
