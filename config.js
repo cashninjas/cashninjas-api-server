@@ -9,6 +9,7 @@ const nrMintingUtxos = 5;
 const collectionSize = 5000;
 const network = "mainnet";
 const apiDomain = "https://example.com/";
+const appName = "YourAppName";
 
 // Chaingraph instance. This returns our UTXO information.
 // Thanks Jason for running an awesome server.
@@ -47,4 +48,4 @@ try {
   };
 }
 
-export { mintStatus, tokenId, contractAddressMint, mintDate, nrMintingUtxos, collectionSize, network, apiDomain, bcmrJSON, chaingraphUrl, hideIPFSImages, hideIPFSIcons };
+export { appName, mintStatus, tokenId, contractAddressMint, mintDate, nrMintingUtxos, collectionSize, network, apiDomain, bcmrJSON, chaingraphUrl, hideIPFSImages, hideIPFSIcons };

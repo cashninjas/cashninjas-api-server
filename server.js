@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { ElectrumClient } from "electrum-cash";
-import { mintStatus, tokenId, contractAddressMint, mintDate, nrMintingUtxos, collectionSize, network, apiDomain, bcmrJSON, chaingraphUrl, hideIPFSImages, hideIPFSIcons } from "./config.js";
+import { appName, mintStatus, tokenId, contractAddressMint, mintDate, nrMintingUtxos, collectionSize, network, apiDomain, bcmrJSON, chaingraphUrl, hideIPFSImages, hideIPFSIcons } from "./config.js";
 import { queryMintingNFTs } from './queryChainGraph.js';
 import { vmNumberToBigInt, hexToBin, bigIntToVmNumber, binToHex } from '@bitauth/libauth';
 
@@ -14,7 +14,7 @@ app.use(express.json());
 // Initialize an electrum client and wait for the client to connect.
 // We use this client for address updates.
 const electrumClient = network == "mainnet" ? "fulcrum.greyh.at" : "chipnet.imaginary.cash";
-const electrum = new ElectrumClient('Electrum client example', '1.4.1', electrumClient);
+const electrum = new ElectrumClient(appName, '1.4.1', electrumClient);
 await electrum.connect();
 
 // Declare global scope variables.
