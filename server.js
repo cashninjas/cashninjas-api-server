@@ -14,7 +14,7 @@ app.use(express.json());
 // Initialize an electrum client and wait for the client to connect.
 // We use this client for address updates.
 const electrumClient = network == "mainnet" ? "fulcrum.greyh.at" : "chipnet.imaginary.cash";
-const electrum = new ElectrumClient(appName, '1.4.1', electrumClient);
+const electrum = new ElectrumClient(appName, '1.5.1', electrumClient);
 await electrum.connect();
 
 // Declare global scope variables.
